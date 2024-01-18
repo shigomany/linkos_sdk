@@ -4,11 +4,8 @@ import 'package:pigeon/pigeon.dart';
   dartOut: 'lib/src/messages.g.dart',
   dartOptions: DartOptions(),
   cppOptions: CppOptions(namespace: 'pigeon_example'),
-
-  swiftOptions: SwiftOptions(),
-  // Set this to a unique prefix for your plugin or application, per Objective-C naming conventions.
   objcOptions: ObjcOptions(prefix: 'PGN'),
-  copyrightHeader: 'pigeons/copyright.txt',
+  // copyrightHeader: 'pigeons/copyright.txt',
   dartPackageName: 'pigeon_example_package',
   // Out files
   // C++
