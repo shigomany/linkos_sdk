@@ -1,16 +1,14 @@
-# linkos_sdk
+# Link OS Multiplatform SDK for Dart
 
-A new Flutter project.
+This package provides full multiplatform (Mobile - Android, iOS, Desktop - macOS, Windows, Linux) Zebra Technology [Link-OS Multiplatform SDK](https://techdocs.zebra.com/link-os/)
+
+## Inspiration
+
+This package was inspired due to a problem related to the fact that the current packages with Links ([zsdk](https://pub.dev/packages/zsdk), [zebrautility](https://pub.dev/packages/zebrautility)) had a number of problems:
+
+- **Desktop support**. This package supports desktop versions based on Java for Linix, macOS, and on C# (.NET) for Windows.
+- **Weak support**. Updates are too rare. Maximum Dart version 2.18 and Flutter 1.22.
+- **An unfinished API**. Some SDKs don't have features like printer detection. In this package, I tried to completely replicate the API that is used in the Link OS SDK adapted for Dart.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
