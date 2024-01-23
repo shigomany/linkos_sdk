@@ -12,3 +12,11 @@ This package was inspired due to a problem related to the fact that the current 
 
 ## Getting Started
 
+
+## Third Party
+
+Before starting contribute your code generate files (in root folder):
+
+```bash
+dart run build_runner build
+```

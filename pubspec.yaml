@@ -38,7 +38,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.example.linkos_sdk
+        package: com.plugin.linkos_sdk
         pluginClass: LinkosSdkPlugin
       ios:
         pluginClass: LinkosSdkPlugin
@@ -79,3 +79,53 @@ flutter:
   #
   # For details regarding fonts in packages, see
   # https://flutter.dev/custom-fonts/#from-packages
+pigeon:
+  # main-input defines default values and base paths or package names
+  main-input:
+    input: pigeons/
+    dart:
+      out: lib/src/pigeons/ 
+      test-out: test/pigeons/
+    # ast:
+    #   out: lib/src/pigeons_ast/
+    objc:
+      header-out: ios/Runner/
+      source-out: ios/Runner/
+      # Set this to a unique prefix for your plugin or application, per Objective-C naming conventions.
+      prefix: LINKOS
+    java:
+      out: android/src/main/java/com/plugin/linkos_sdk
+      package: com.plugin.linkos_sdk
+    # swift:
+    #   out: ios/Runner/
+    # kotlin:
+    #   out: android/app/src/main/kotlin/dev/flutter/pigeon_example_app
+    #   package: your.package.name
+    cpp:
+      header-out: windows/runner
+      source-out: windows/runner
+      namespace: LinkOs
+  inputs:
+    - input: link_os_sdk.dart
+      dart:
+        out: link_os_sdk.g.dart
+        test-out: link_os_sdk.dart
+      # ast:
+      #   out: my_pigeon_ast.dart
+      # objc:
+      #   header-out: my_pigeon.g.h
+      #   source-out: my_pigeon.g.s
+      java:
+        out: LinkOsSdkGen.java
+        # Adding `.` before a package will join a package name from main-input with the package belowe
+        # Result: your.package.name.additional.package.name
+      # kotlin:
+      #   out: MyPigeon.g.kt
+      #   # Adding `.` before a package will join a package name from main-input with the package belowe
+      #   # Result: your.package.name.additional.package.name
+      #   package: .additional.package.name
+      # swift:
+      #   out: MyPigeon.g.swift
+      # cpp:
+      #   header-out: my_pigeon.g.h
+      #   source-out: my_pigeon.g.cpp
