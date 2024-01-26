@@ -1,4 +1,4 @@
-package com.example.linkos_sdk_example
+package com.plugin.linkos_sdk_example
 
 import io.flutter.embedding.android.FlutterActivity
 

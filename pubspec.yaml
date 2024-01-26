@@ -3,6 +3,15 @@ description: "Link-OS Multiplatform SDK for Dart/Flutter"
 version: 0.0.1
 homepage: https://github.com/shigomany/linkos_sdk.git
 
+platforms:
+  android:
+  ios:
+
+topics:
+  - printers
+  - zebra
+  - pigeon
+
 environment:
   sdk: '>=3.2.3 <4.0.0'
   flutter: '>=3.3.0'
@@ -16,7 +25,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
-  pigeon: ^16.0.3
+  pigeon: ^16.0.4
   build_runner: ^2.4.8
   pigeon_build_runner: ^1.1.1
 
@@ -25,16 +34,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-  # This section identifies this Flutter project as a plugin project.
-  # The 'pluginClass' specifies the class (in Java, Kotlin, Swift, Objective-C, etc.)
-  # which should be registered in the plugin registry. This is required for
-  # using method channels.
-  # The Android 'package' specifies package in which the registered class is.
-  # This is required for using method channels on Android.
-  # The 'ffiPlugin' specifies that native code should be built and bundled.
-  # This is required for using `dart:ffi`.
-  # All these are used by the tooling to maintain consistency when
-  # adding or updating assets for this project.
   plugin:
     platforms:
       android:
@@ -86,46 +85,21 @@ pigeon:
     dart:
       out: lib/src/pigeons/ 
       test-out: test/pigeons/
-    # ast:
-    #   out: lib/src/pigeons_ast/
-    objc:
-      header-out: ios/Runner/
-      source-out: ios/Runner/
-      # Set this to a unique prefix for your plugin or application, per Objective-C naming conventions.
-      prefix: LINKOS
-    java:
-      out: android/src/main/java/com/plugin/linkos_sdk
+    swift:
+      out: ios/Runner/
+    kotlin:
+      out: android/src/main/kotlin/com/plugin/linkos_sdk
       package: com.plugin.linkos_sdk
-    # swift:
-    #   out: ios/Runner/
-    # kotlin:
-    #   out: android/app/src/main/kotlin/dev/flutter/pigeon_example_app
-    #   package: your.package.name
     cpp:
       header-out: windows/runner
       source-out: windows/runner
       namespace: LinkOs
+
   inputs:
-    - input: link_os_sdk.dart
+
+    - input: linkos_sdk_over_tcpip.dart
       dart:
-        out: link_os_sdk.g.dart
-        test-out: link_os_sdk.dart
-      # ast:
-      #   out: my_pigeon_ast.dart
-      # objc:
-      #   header-out: my_pigeon.g.h
-      #   source-out: my_pigeon.g.s
-      java:
-        out: LinkOsSdkGen.java
-        # Adding `.` before a package will join a package name from main-input with the package belowe
-        # Result: your.package.name.additional.package.name
-      # kotlin:
-      #   out: MyPigeon.g.kt
-      #   # Adding `.` before a package will join a package name from main-input with the package belowe
-      #   # Result: your.package.name.additional.package.name
-      #   package: .additional.package.name
-      # swift:
-      #   out: MyPigeon.g.swift
-      # cpp:
-      #   header-out: my_pigeon.g.h
-      #   source-out: my_pigeon.g.cpp
+        out: linkos_sdk_over_tcpip.dart
+        test-out: linkos_sdk_over_tcpip_test.dart
+      kotlin:
+        out: ILinkOsSdkOverTcpIp.kt

@@ -1,4 +1,4 @@
-package com.example.linkos_sdk
+package com.plugin.linkos_sdk
 
 import androidx.annotation.NonNull
 

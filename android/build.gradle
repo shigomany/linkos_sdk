@@ -1,4 +1,4 @@
-group 'com.example.linkos_sdk'
+group 'com.plugin.linkos_sdk'
 version '1.0-SNAPSHOT'
 
 buildscript {

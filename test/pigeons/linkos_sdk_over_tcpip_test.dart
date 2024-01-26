@@ -8,4 +8,4 @@ import 'package:flutter/foundation.dart' show ReadBuffer, WriteBuffer;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:linkos_sdk/src/pigeons/link_os_sdk.g.dart';
+import 'package:linkos_sdk/src/pigeons/linkos_sdk_over_tcpip.dart';
