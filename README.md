@@ -10,5 +10,17 @@ This package was inspired due to a problem related to the fact that the current 
 - **Weak support**. Updates are too rare. Maximum Dart version 2.18 and Flutter 1.22.
 - **An unfinished API**. Some SDKs don't have features like printer detection. In this package, I tried to completely replicate the API that is used in the Link OS SDK adapted for Dart.
 
+## Supported functionality
+
+
+
 ## Getting Started
 
+
+## Third Party
+
+Before starting contribute your code generate files (in root folder):
+
+```bash
+dart run build_runner build
+```
