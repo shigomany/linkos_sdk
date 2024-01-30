@@ -100,6 +100,6 @@ pigeon:
     - input: linkos_sdk_over_tcpip.dart
       dart:
         out: linkos_sdk_over_tcpip.dart
-        test-out: linkos_sdk_over_tcpip_test.dart
+        # test-out: linkos_sdk_over_tcpip_test.dart
       kotlin:
         out: ILinkOsSdkOverTcpIp.kt

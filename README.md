@@ -16,6 +16,21 @@ This package was inspired due to a problem related to the fact that the current 
 
 ## Getting Started
 
+You need to create an instance of the class with the connection type:
+
+```dart
+import 'package:linkos_sdk/linkos_sdk.dart';
+
+const linkOs = LinkOS(PrinterConnection.tcpIp(ipAddress: '192.168.0.1'));
+```
+
+Printer status:
+
+```dart
+void main() async {
+  final status = await linkOs.currentStatus();
+}
+```
 
 ## Third Party
 

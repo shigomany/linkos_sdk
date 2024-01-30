@@ -45,26 +45,26 @@ enum PrinterStatus {
 @HostApi()
 abstract class LinkOsSdkOverTcpIp {
   /// Returns a [PrinterStatus] that can be used to determine the status of a printer.
-  PrinterStatus currentStatus(String ipAddress, int port);
+  PrinterStatus currentStatus(String ipAddress, int? port);
 
   /// Returns the printer control language (e.g. ZPL or CPCL) of the printer.
-  PrinterLanguage controlLanguage(String ipAddress, int port);
+  PrinterLanguage controlLanguage(String ipAddress, int? port);
 
   /// Prints an image to the connected device as a monochrome image.
-  void printImage(String ipAddress, int port, Uint8List data);
+  void printImage(String ipAddress, int? port, Uint8List data);
 
   /// Sends the appropriate calibrate command to the printer.
-  void calibrate(String ipAddress, int port);
+  void calibrate(String ipAddress, int? port);
 
   /// Sends the appropriate print configuration command to the printer.
-  void printConfigurationLabel(String ipAddress, int port);
+  void printConfigurationLabel(String ipAddress, int? port);
 
   /// Sends the appropriate restore defaults command to the printer.
-  void restoreDefaults(String ipAddress, int port);
+  void restoreDefaults(String ipAddress, int? port);
 
   /// Converts the specified command to bytes using the Java default charset and sends the bytes to the printer.
-  void sendCommand(String ipAddress, int port, String command);
+  void sendCommand(String ipAddress, int? port, String command);
 
   /// Sends the appropriate reset command to the printer.
-  void reset(String ipAddress, int port);
+  void reset(String ipAddress, int? port);
 }

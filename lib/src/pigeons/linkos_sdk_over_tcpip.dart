@@ -15,16 +15,6 @@ PlatformException _createConnectionError(String channelName) {
   );
 }
 
-List<Object?> wrapResponse({Object? result, PlatformException? error, bool empty = false}) {
-  if (empty) {
-    return <Object?>[];
-  }
-  if (error == null) {
-    return <Object?>[result];
-  }
-  return <Object?>[error.code, error.message, error.details];
-}
-
 /// Enumeration of the various printer control languages supported by Zebra Printers.
 enum PrinterLanguage {
   /// Printer control language ZPL.
@@ -68,7 +58,7 @@ class LinkOsSdkOverTcpIp {
   static const MessageCodec<Object?> pigeonChannelCodec = StandardMessageCodec();
 
   /// Returns a [PrinterStatus] that can be used to determine the status of a printer.
-  Future<PrinterStatus> currentStatus(String ipAddress, int port) async {
+  Future<PrinterStatus> currentStatus(String ipAddress, int? port) async {
     const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.LinkOsSdkOverTcpIp.currentStatus';
     final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -96,7 +86,7 @@ class LinkOsSdkOverTcpIp {
   }
 
   /// Returns the printer control language (e.g. ZPL or CPCL) of the printer.
-  Future<PrinterLanguage> controlLanguage(String ipAddress, int port) async {
+  Future<PrinterLanguage> controlLanguage(String ipAddress, int? port) async {
     const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.LinkOsSdkOverTcpIp.controlLanguage';
     final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -124,7 +114,7 @@ class LinkOsSdkOverTcpIp {
   }
 
   /// Prints an image to the connected device as a monochrome image.
-  Future<void> printImage(String ipAddress, int port, Uint8List data) async {
+  Future<void> printImage(String ipAddress, int? port, Uint8List data) async {
     const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.LinkOsSdkOverTcpIp.printImage';
     final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -147,7 +137,7 @@ class LinkOsSdkOverTcpIp {
   }
 
   /// Sends the appropriate calibrate command to the printer.
-  Future<void> calibrate(String ipAddress, int port) async {
+  Future<void> calibrate(String ipAddress, int? port) async {
     const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.LinkOsSdkOverTcpIp.calibrate';
     final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -170,7 +160,7 @@ class LinkOsSdkOverTcpIp {
   }
 
   /// Sends the appropriate print configuration command to the printer.
-  Future<void> printConfigurationLabel(String ipAddress, int port) async {
+  Future<void> printConfigurationLabel(String ipAddress, int? port) async {
     const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.LinkOsSdkOverTcpIp.printConfigurationLabel';
     final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -193,7 +183,7 @@ class LinkOsSdkOverTcpIp {
   }
 
   /// Sends the appropriate restore defaults command to the printer.
-  Future<void> restoreDefaults(String ipAddress, int port) async {
+  Future<void> restoreDefaults(String ipAddress, int? port) async {
     const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.LinkOsSdkOverTcpIp.restoreDefaults';
     final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -216,7 +206,7 @@ class LinkOsSdkOverTcpIp {
   }
 
   /// Converts the specified command to bytes using the Java default charset and sends the bytes to the printer.
-  Future<void> sendCommand(String ipAddress, int port, String command) async {
+  Future<void> sendCommand(String ipAddress, int? port, String command) async {
     const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.LinkOsSdkOverTcpIp.sendCommand';
     final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<Object?>(
       __pigeon_channelName,
@@ -239,7 +229,7 @@ class LinkOsSdkOverTcpIp {
   }
 
   /// Sends the appropriate reset command to the printer.
-  Future<void> reset(String ipAddress, int port) async {
+  Future<void> reset(String ipAddress, int? port) async {
     const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.LinkOsSdkOverTcpIp.reset';
     final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<Object?>(
       __pigeon_channelName,

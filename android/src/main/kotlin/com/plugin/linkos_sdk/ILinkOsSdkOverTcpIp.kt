@@ -89,21 +89,21 @@ enum class PrinterStatus(val raw: Int) {
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface LinkOsSdkOverTcpIp {
   /** Returns a [PrinterStatus] that can be used to determine the status of a printer. */
-  fun currentStatus(ipAddress: String, port: Long): PrinterStatus
+  fun currentStatus(ipAddress: String, port: Long?): PrinterStatus
   /** Returns the printer control language (e.g. ZPL or CPCL) of the printer. */
-  fun controlLanguage(ipAddress: String, port: Long): PrinterLanguage
+  fun controlLanguage(ipAddress: String, port: Long?): PrinterLanguage
   /** Prints an image to the connected device as a monochrome image. */
-  fun printImage(ipAddress: String, port: Long, data: ByteArray)
+  fun printImage(ipAddress: String, port: Long?, data: ByteArray)
   /** Sends the appropriate calibrate command to the printer. */
-  fun calibrate(ipAddress: String, port: Long)
+  fun calibrate(ipAddress: String, port: Long?)
   /** Sends the appropriate print configuration command to the printer. */
-  fun printConfigurationLabel(ipAddress: String, port: Long)
+  fun printConfigurationLabel(ipAddress: String, port: Long?)
   /** Sends the appropriate restore defaults command to the printer. */
-  fun restoreDefaults(ipAddress: String, port: Long)
+  fun restoreDefaults(ipAddress: String, port: Long?)
   /** Converts the specified command to bytes using the Java default charset and sends the bytes to the printer. */
-  fun sendCommand(ipAddress: String, port: Long, command: String)
+  fun sendCommand(ipAddress: String, port: Long?, command: String)
   /** Sends the appropriate reset command to the printer. */
-  fun reset(ipAddress: String, port: Long)
+  fun reset(ipAddress: String, port: Long?)
 
   companion object {
     /** The codec used by LinkOsSdkOverTcpIp. */
@@ -119,7 +119,7 @@ interface LinkOsSdkOverTcpIp {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val ipAddressArg = args[0] as String
-            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long }
+            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long? }
             var wrapped: List<Any?>
             try {
               wrapped = listOf<Any?>(api.currentStatus(ipAddressArg, portArg).raw)
@@ -138,7 +138,7 @@ interface LinkOsSdkOverTcpIp {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val ipAddressArg = args[0] as String
-            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long }
+            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long? }
             var wrapped: List<Any?>
             try {
               wrapped = listOf<Any?>(api.controlLanguage(ipAddressArg, portArg).raw)
@@ -157,7 +157,7 @@ interface LinkOsSdkOverTcpIp {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val ipAddressArg = args[0] as String
-            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long }
+            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long? }
             val dataArg = args[2] as ByteArray
             var wrapped: List<Any?>
             try {
@@ -178,7 +178,7 @@ interface LinkOsSdkOverTcpIp {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val ipAddressArg = args[0] as String
-            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long }
+            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long? }
             var wrapped: List<Any?>
             try {
               api.calibrate(ipAddressArg, portArg)
@@ -198,7 +198,7 @@ interface LinkOsSdkOverTcpIp {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val ipAddressArg = args[0] as String
-            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long }
+            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long? }
             var wrapped: List<Any?>
             try {
               api.printConfigurationLabel(ipAddressArg, portArg)
@@ -218,7 +218,7 @@ interface LinkOsSdkOverTcpIp {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val ipAddressArg = args[0] as String
-            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long }
+            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long? }
             var wrapped: List<Any?>
             try {
               api.restoreDefaults(ipAddressArg, portArg)
@@ -238,7 +238,7 @@ interface LinkOsSdkOverTcpIp {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val ipAddressArg = args[0] as String
-            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long }
+            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long? }
             val commandArg = args[2] as String
             var wrapped: List<Any?>
             try {
@@ -259,7 +259,7 @@ interface LinkOsSdkOverTcpIp {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
             val ipAddressArg = args[0] as String
-            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long }
+            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long? }
             var wrapped: List<Any?>
             try {
               api.reset(ipAddressArg, portArg)
