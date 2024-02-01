@@ -21,7 +21,7 @@ class FutureStatesBuilder<T> extends StatelessWidget {
 
   final ArgValueGetter<Widget, T>? success;
 
-  final ValueGetter<Widget>? failure;
+  final ArgValueGetter<Widget, Object>? failure;
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +29,9 @@ class FutureStatesBuilder<T> extends StatelessWidget {
       InitialFutureState() => initial?.call() ?? const SizedBox.shrink(),
       PendingFutureState() => pending?.call() ?? const SizedBox.shrink(),
       SuccessFutureState(value: final successValue) =>
-        success?.call(successValue as T) ?? const SizedBox.shrink(),
-      FailureFutureState() => failure?.call() ?? const SizedBox.shrink(),
+        success?.call(successValue) ?? const SizedBox.shrink(),
+      FailureFutureState(error: final error) =>
+        failure?.call(error) ?? const SizedBox.shrink(),
     };
   }
 }

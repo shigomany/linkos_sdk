@@ -7,6 +7,7 @@ import com.zebra.sdk.comm.TcpConnection;
 import com.zebra.sdk.graphics.ZebraImageFactory
 
 import com.zebra.sdk.printer.ZebraPrinterFactory
+import java.lang.Exception
 import kotlin.concurrent.thread
 import com.zebra.sdk.printer.PrinterLanguage as ZPrinterLanguage
 
@@ -14,31 +15,25 @@ class ImplLinkOsSdkOverTcpIp : LinkOsSdkOverTcpIp {
     override fun currentStatus(ipAddress: String, port: Long?): PrinterStatus {
         lateinit var status: PrinterStatus
         val conn = tcpConnection(ipAddress, port)
-        val thr = Thread {
 
-            conn.open()
-
+        executeThreaded(connection = conn, callback = {
             val zPrinter = ZebraPrinterFactory.getInstance(conn)
 
             status = convertPrinterStatus(zPrinter.currentStatus)
-
-        }
-        thr.start()
-        thr.join(3000)
-        conn.close()
+        })
 
         return status
     }
 
     override fun controlLanguage(ipAddress: String, port: Long?): PrinterLanguage {
         val conn = tcpConnection(ipAddress, port)
-        conn.open()
 
-        val zPrinter = ZebraPrinterFactory.getInstance(conn)
+        lateinit var result: ZPrinterLanguage
 
-        val result = zPrinter.printerControlLanguage
-
-        conn.close()
+        executeThreaded(connection = conn, callback = {
+            val zPrinter = ZebraPrinterFactory.getInstance(conn)
+            result = zPrinter.printerControlLanguage
+        })
 
         return when(result) {
             ZPrinterLanguage.CPCL -> PrinterLanguage.CPCL
@@ -49,63 +44,71 @@ class ImplLinkOsSdkOverTcpIp : LinkOsSdkOverTcpIp {
 
     override fun printImage(ipAddress: String, port: Long?, data: ByteArray) {
         val conn = tcpConnection(ipAddress, port)
-        conn.open()
 
-        val zPrinter = ZebraPrinterFactory.getInstance(conn)
-        val bitmapImage = ZebraImageFactory.getImage(BitmapFactory.decodeByteArray(data, 0, data.size))
-        zPrinter.printImage(bitmapImage, 0, 0, 0, 0, false)
-
-        conn.close()
+        executeThreaded(connection = conn, callback = {
+            val zPrinter = ZebraPrinterFactory.getInstance(conn)
+            val bitmapValue = BitmapFactory.decodeByteArray(data, 0, data.size)
+            val bitmapImage = ZebraImageFactory.getImage(bitmapValue)
+            zPrinter.printImage(bitmapImage, 0, 0, 0, 0, false)
+        })
     }
 
     override fun calibrate(ipAddress: String, port: Long?) {
         val conn = tcpConnection(ipAddress, port)
-        conn.open()
-
-        val zPrinter = ZebraPrinterFactory.getInstance(conn)
-        zPrinter.calibrate()
-
-        conn.close()
+        executeThreaded(connection = conn, callback = {
+            val zPrinter = ZebraPrinterFactory.getInstance(conn)
+            zPrinter.calibrate()
+        })
     }
 
     override fun printConfigurationLabel(ipAddress: String, port: Long?) {
         val conn = tcpConnection(ipAddress, port)
-        conn.open()
 
-        val zPrinter = ZebraPrinterFactory.getInstance(conn)
-        zPrinter.printConfigurationLabel()
-
-        conn.close()
+        executeThreaded(connection = conn, callback = {
+            val zPrinter = ZebraPrinterFactory.getInstance(conn)
+            zPrinter.printConfigurationLabel()
+        })
     }
 
     override fun restoreDefaults(ipAddress: String, port: Long?) {
         val conn = tcpConnection(ipAddress, port)
-        conn.open()
-
-        val zPrinter = ZebraPrinterFactory.getInstance(conn)
-        zPrinter.restoreDefaults()
-
-        conn.close()
+        executeThreaded(connection = conn, callback = {
+            val zPrinter = ZebraPrinterFactory.getInstance(conn)
+            zPrinter.restoreDefaults()
+        })
     }
 
     override fun sendCommand(ipAddress: String, port: Long?, command: String) {
         val conn = tcpConnection(ipAddress, port)
-        conn.open()
 
-        val zPrinter = ZebraPrinterFactory.getInstance(conn)
-        zPrinter.sendCommand(command)
-
-        conn.close()
+        executeThreaded(connection = conn, callback = {
+            val zPrinter = ZebraPrinterFactory.getInstance(conn)
+            zPrinter.sendCommand(command)
+        });
     }
 
     override fun reset(ipAddress: String, port: Long?) {
         val conn = tcpConnection(ipAddress, port)
-        conn.open()
+        executeThreaded(connection = conn, callback = {
+            val zPrinter = ZebraPrinterFactory.getInstance(conn)
+            zPrinter.reset()
+        });
+    }
 
-        val zPrinter = ZebraPrinterFactory.getInstance(conn)
-        zPrinter.reset()
+    /// Execute [callback] in non-main thread.
+    /// Also [connection.open] and close after finished [callback]
+    private fun executeThreaded(connection: TcpConnection, callback: () -> Unit) {
+        try {
+            thread (start = true) {
+                connection.open()
 
-        conn.close()
+                callback()
+            }.join()
+        } catch (_: Exception) {
+
+        } finally {
+            connection.close()
+        }
     }
 
     private fun tcpConnection(ipAddress: String, port: Long?): TcpConnection {

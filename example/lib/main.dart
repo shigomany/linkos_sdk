@@ -64,7 +64,8 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                     initial: () => const Text('No Data'),
                     pending: () => const CircularProgressIndicator.adaptive(),
                     success: (value) => Text(value.name),
-                    failure: () => const Text('Error with printer status'),
+                    failure: (error) =>
+                        Text('Error with printer status: $error'),
                   ),
                 ),
               ),
@@ -96,7 +97,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       });
     } catch (e) {
       setState(() {
-        _printerStatus = const FutureStates.failure();
+        _printerStatus = FutureStates.failure(error: e);
       });
     }
   }
