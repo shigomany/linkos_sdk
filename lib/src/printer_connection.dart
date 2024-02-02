@@ -1,3 +1,5 @@
+import 'utils/regex.dart';
+
 /// Represents two types connection:
 ///
 /// * Bluetooth [BluetoothConnection] - in future
@@ -27,8 +29,7 @@ final class TcpIpConnection extends PrinterConnection {
     this.port,
   })  : assert(port == null || port >= 0, 'Port should not be negative'),
         assert(
-          RegExp(r'^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$')
-              .hasMatch(ipAddress),
+          ipAddressRegex.hasMatch(ipAddress),
           'Invalid ip format',
         ),
         super._();

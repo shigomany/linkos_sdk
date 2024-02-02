@@ -1,6 +1,7 @@
 package com.plugin.linkos_sdk
 
 import android.content.res.Resources.NotFoundException
+import com.plugin.linkos_sdk.link_os.PrinterStatus
 import com.zebra.sdk.printer.PrinterStatus as ZPrinterStatus
 
 fun convertPrinterStatus(status: ZPrinterStatus) : PrinterStatus {

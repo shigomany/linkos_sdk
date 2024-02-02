@@ -43,7 +43,7 @@ enum PrinterStatus {
 }
 
 @HostApi()
-abstract class LinkOsSdkOverTcpIp {
+abstract class LinkOsSdkOverTcpIpAPI {
   /// Returns a [PrinterStatus] that can be used to determine the status of a printer.
   PrinterStatus currentStatus(String ipAddress, int? port);
 

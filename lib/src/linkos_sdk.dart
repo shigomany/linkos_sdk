@@ -1,4 +1,4 @@
-import 'pigeons/linkos_sdk_over_tcpip.dart';
+import 'pigeons/linkos_sdk_over_tcpip_api.dart';
 import 'printer_connection.dart';
 
 /// {@macro src.LinkOS}
@@ -17,7 +17,7 @@ final class LinkOS {
   Future<PrinterLanguage> controlLanguage() {
     return switch (_connection) {
       TcpIpConnection(ipAddress: final ipAddress, port: final port) => () {
-          final tcpIpSdk = LinkOsSdkOverTcpIp();
+          final tcpIpSdk = LinkOsSdkOverTcpIpAPI();
 
           return tcpIpSdk.controlLanguage(ipAddress, port);
         }(),
@@ -30,7 +30,7 @@ final class LinkOS {
   Future<PrinterStatus> currentStatus() {
     return switch (_connection) {
       TcpIpConnection(ipAddress: final ipAddress, port: final port) => () {
-          final tcpIpSdk = LinkOsSdkOverTcpIp();
+          final tcpIpSdk = LinkOsSdkOverTcpIpAPI();
 
           return tcpIpSdk.currentStatus(ipAddress, port);
         }(),

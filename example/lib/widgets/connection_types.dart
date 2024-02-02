@@ -32,12 +32,8 @@ class _ConnectionTypesState extends State<ConnectionTypes>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Theme.of(context).highlightColor,
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
         children: [
           TabBar(
@@ -72,7 +68,6 @@ class _ConnectionTypesState extends State<ConnectionTypes>
 final class _NetworkConnection extends StatefulWidget {
   const _NetworkConnection({
     this.ipController,
-    super.key,
   });
 
   final TextEditingController? ipController;
@@ -110,7 +105,7 @@ class _NetworkConnectionState extends State<_NetworkConnection> {
 }
 
 final class _BluetoothConnection extends StatelessWidget {
-  const _BluetoothConnection({super.key});
+  const _BluetoothConnection();
 
   @override
   Widget build(BuildContext context) {

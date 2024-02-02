@@ -1,6 +1,7 @@
-package com.plugin.linkos_sdk
+package com.plugin.linkos_sdk.link_os
 
 import android.graphics.BitmapFactory
+import com.plugin.linkos_sdk.convertPrinterStatus
 
 import com.zebra.sdk.comm.TcpConnection;
 
@@ -11,7 +12,7 @@ import java.lang.Exception
 import kotlin.concurrent.thread
 import com.zebra.sdk.printer.PrinterLanguage as ZPrinterLanguage
 
-class ImplLinkOsSdkOverTcpIp : LinkOsSdkOverTcpIp {
+class ImplLinkOsSdkOverTcpIpAPI : LinkOsSdkOverTcpIpAPI {
     override fun currentStatus(ipAddress: String, port: Long?): PrinterStatus {
         lateinit var status: PrinterStatus
         val conn = tcpConnection(ipAddress, port)
@@ -98,17 +99,18 @@ class ImplLinkOsSdkOverTcpIp : LinkOsSdkOverTcpIp {
     /// Execute [callback] in non-main thread.
     /// Also [connection.open] and close after finished [callback]
     private fun executeThreaded(connection: TcpConnection, callback: () -> Unit) {
-        try {
             thread (start = true) {
-                connection.open()
+                try {
+                    connection.open()
 
-                callback()
+                    callback()
+                } catch (_: Exception) {
+
+                } finally {
+                    connection.close()
+                }
             }.join()
-        } catch (_: Exception) {
 
-        } finally {
-            connection.close()
-        }
     }
 
     private fun tcpConnection(ipAddress: String, port: Long?): TcpConnection {

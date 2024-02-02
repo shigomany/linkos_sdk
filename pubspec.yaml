@@ -97,9 +97,16 @@ pigeon:
 
   inputs:
 
-    - input: linkos_sdk_over_tcpip.dart
+    - input: linkos_sdk_over_tcpip_api.dart
       dart:
-        out: linkos_sdk_over_tcpip.dart
-        # test-out: linkos_sdk_over_tcpip_test.dart
+        out: linkos_sdk_over_tcpip_api.dart
       kotlin:
-        out: ILinkOsSdkOverTcpIp.kt
+        out: link_os/ILinkOsSdkOverTcpIpAPI.kt
+        package: .link_os
+
+    - input: network_discovery_printers_api.dart
+      dart:
+        out: network_discovery_printers_api.dart
+      kotlin:
+        out: discovery/INetworkDiscoveryPrintersAPI.kt
+        package: .discovery

@@ -10,9 +10,32 @@ This package was inspired due to a problem related to the fact that the current 
 - **Weak support**. Updates are too rare. Maximum Dart version 2.18 and Flutter 1.22.
 - **An unfinished API**. Some SDKs don't have features like printer detection. In this package, I tried to completely replicate the API that is used in the Link OS SDK adapted for Dart.
 
-## Supported functionality
+## Supported Functionality
 
+| Functionality  |      iOS      |    Android    |    Windows    |     MacOS     |     Linux     |
+| -------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
+| Connect via Bluetooth  |      ❌       |      ❌       |      ❌      |      ❌       |      ❌       |
+| Connect via TCP/IP  |      ❌       |      ✅       |      ❌      |      ❌       |      ❌       |
+| Printer Status  |      ❌       |      ✅       |      ❌      |      ❌       |      ❌       |
+| Printer Control Language  |      ❌       |      ✅       |      ❌      |      ❌       |      ❌       |
+| Print Image  |      ❌       |      ✅       |      ❌      |      ❌       |      ❌       |
+| Calibrate  |      ❌       |      ✅       |      ❌      |      ❌       |      ❌       |
+| Print Config. Label  |      ❌       |      ✅       |      ❌      |      ❌       |      ❌       |
+| Restore to defaults |      ❌       |      ✅       |      ❌      |      ❌       |      ❌       |
+| Send command |      ❌       |      ✅       |      ❌      |      ❌       |      ❌       |
+| Reset |      ❌       |      ✅       |      ❌      |      ❌       |      ❌       |
+| Network discovery printers |      ❌       |      ✅       |      ❌      |      ❌       |      ❌       |
+| Bluetooth discovery printers |      ❌       |      ❌       |      ❌      |      ❌       |      ❌       |
+| USB discovery printers |      ❌       |      ❌       |      ❌      |      ❌       |      ❌       |
+| Print XML |      ❌       |      ❌       |      ❌      |      ❌       |      ❌       |
+| Print CSV |      ❌       |      ❌       |      ❌      |      ❌       |      ❌       |
+| Get all printer settings |      ❌       |      ❌       |      ❌      |      ❌       |      ❌       |
 
+Where:
+
+- ✅ - full completed
+- ❌ - not completed
+- ⚠️ - partial comleted
 
 ## Getting Started
 
