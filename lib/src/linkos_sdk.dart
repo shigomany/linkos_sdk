@@ -1,4 +1,4 @@
-import 'pigeons/linkos_sdk_over_tcpip_api.dart';
+import 'pigeons/printer_tcpip_api.dart';
 import 'printer_connection.dart';
 
 /// {@macro src.LinkOS}
