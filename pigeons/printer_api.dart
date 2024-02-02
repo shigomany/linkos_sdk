@@ -1,5 +1,6 @@
 import 'package:pigeon/pigeon.dart';
 
+/// {@nodoc}
 class ConnectionInfo {
   const ConnectionInfo({
     this.ipAddress,
@@ -13,6 +14,7 @@ class ConnectionInfo {
 }
 
 /// Enumeration of the various printer control languages supported by Zebra Printers.
+/// {@category Printer}
 enum PrinterLanguage {
   /// Printer control language ZPL.
   zpl,
@@ -25,6 +27,7 @@ enum PrinterLanguage {
 }
 
 /// Describe printer status.
+/// {@category Printer}
 enum PrinterStatus {
   /// The head is cold.
   headCold,
@@ -55,6 +58,8 @@ enum PrinterStatus {
 }
 
 @HostApi()
+
+/// {@nodoc}
 abstract class PrinterAPI {
   /// Returns a [PrinterStatus] that can be used to determine the status of a printer.
   PrinterStatus currentStatus(ConnectionInfo info);

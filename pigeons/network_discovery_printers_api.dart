@@ -1,6 +1,8 @@
 import 'package:pigeon/pigeon.dart';
 
 @HostApi()
+
+/// {@nodoc}
 abstract class NetworkDiscoveryPrintersAPI {
   List<String> subnetSearch(String subnetRange, int? waitForResponsesTimeout);
 

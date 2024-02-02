@@ -43,7 +43,10 @@ class FlutterError (
   val details: Any? = null
 ) : Throwable()
 
-/** Enumeration of the various printer control languages supported by Zebra Printers. */
+/**
+ * Enumeration of the various printer control languages supported by Zebra Printers.
+ * {@category Printer}
+ */
 enum class PrinterLanguage(val raw: Int) {
   /** Printer control language ZPL. */
   ZPL(0),
@@ -59,7 +62,10 @@ enum class PrinterLanguage(val raw: Int) {
   }
 }
 
-/** Describe printer status. */
+/**
+ * Describe printer status.
+ * {@category Printer}
+ */
 enum class PrinterStatus(val raw: Int) {
   /** The head is cold. */
   HEADCOLD(0),

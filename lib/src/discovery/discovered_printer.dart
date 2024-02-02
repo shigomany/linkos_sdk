@@ -8,6 +8,7 @@ enum AddressType {
   localName;
 }
 
+/// Represents an instance of a printer found over the network
 /// {@category Discovery}
 final class DiscoveredPrinter {
   const DiscoveredPrinter({required this.address});

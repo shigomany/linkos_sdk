@@ -16,6 +16,7 @@ PlatformException _createConnectionError(String channelName) {
 }
 
 /// Enumeration of the various printer control languages supported by Zebra Printers.
+/// {@category Printer}
 enum PrinterLanguage {
   /// Printer control language ZPL.
   zpl,
@@ -26,6 +27,7 @@ enum PrinterLanguage {
 }
 
 /// Describe printer status.
+/// {@category Printer}
 enum PrinterStatus {
   /// The head is cold.
   headCold,

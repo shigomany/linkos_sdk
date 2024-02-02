@@ -4,6 +4,8 @@ import 'utils/regex.dart';
 ///
 /// * Bluetooth - [BluetoothConnection]
 /// * TCP/IP - [TcpIpConnection]
+///
+/// {@category Printer}
 sealed class PrinterConnection {
   /// TCP/IP connection type.
   ///
@@ -21,6 +23,9 @@ sealed class PrinterConnection {
   const PrinterConnection._();
 }
 
+/// TCP/IP connection type
+///
+/// {@category Printer}
 final class TcpIpConnection extends PrinterConnection {
   final String ipAddress;
 
@@ -37,6 +42,9 @@ final class TcpIpConnection extends PrinterConnection {
         super._();
 }
 
+/// Bluetooth connection type
+///
+/// {@category Printer}
 final class BluetoothConnection extends PrinterConnection {
   final String macAddress;
 
