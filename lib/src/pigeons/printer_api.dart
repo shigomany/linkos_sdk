@@ -47,26 +47,80 @@ enum PrinterStatus {
   ribbonOut,
 }
 
-class PrinterTCPIPAPI {
-  /// Constructor for [PrinterTCPIPAPI].  The [binaryMessenger] named argument is
+class ConnectionInfo {
+  ConnectionInfo({
+    this.ipAddress,
+    this.macAddress,
+    this.port,
+  });
+
+  String? ipAddress;
+
+  String? macAddress;
+
+  int? port;
+
+  Object encode() {
+    return <Object?>[
+      ipAddress,
+      macAddress,
+      port,
+    ];
+  }
+
+  static ConnectionInfo decode(Object result) {
+    result as List<Object?>;
+    return ConnectionInfo(
+      ipAddress: result[0] as String?,
+      macAddress: result[1] as String?,
+      port: result[2] as int?,
+    );
+  }
+}
+
+class _PrinterAPICodec extends StandardMessageCodec {
+  const _PrinterAPICodec();
+  @override
+  void writeValue(WriteBuffer buffer, Object? value) {
+    if (value is ConnectionInfo) {
+      buffer.putUint8(128);
+      writeValue(buffer, value.encode());
+    } else {
+      super.writeValue(buffer, value);
+    }
+  }
+
+  @override
+  Object? readValueOfType(int type, ReadBuffer buffer) {
+    switch (type) {
+      case 128: 
+        return ConnectionInfo.decode(readValue(buffer)!);
+      default:
+        return super.readValueOfType(type, buffer);
+    }
+  }
+}
+
+class PrinterAPI {
+  /// Constructor for [PrinterAPI].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  PrinterTCPIPAPI({BinaryMessenger? binaryMessenger})
+  PrinterAPI({BinaryMessenger? binaryMessenger})
       : __pigeon_binaryMessenger = binaryMessenger;
   final BinaryMessenger? __pigeon_binaryMessenger;
 
-  static const MessageCodec<Object?> pigeonChannelCodec = StandardMessageCodec();
+  static const MessageCodec<Object?> pigeonChannelCodec = _PrinterAPICodec();
 
   /// Returns a [PrinterStatus] that can be used to determine the status of a printer.
-  Future<PrinterStatus> currentStatus(String ipAddress, int? port) async {
-    const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.PrinterTCPIPAPI.currentStatus';
+  Future<PrinterStatus> currentStatus(ConnectionInfo info) async {
+    const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.PrinterAPI.currentStatus';
     final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<Object?>(
       __pigeon_channelName,
       pigeonChannelCodec,
       binaryMessenger: __pigeon_binaryMessenger,
     );
     final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(<Object?>[ipAddress, port]) as List<Object?>?;
+        await __pigeon_channel.send(<Object?>[info]) as List<Object?>?;
     if (__pigeon_replyList == null) {
       throw _createConnectionError(__pigeon_channelName);
     } else if (__pigeon_replyList.length > 1) {
@@ -86,15 +140,15 @@ class PrinterTCPIPAPI {
   }
 
   /// Returns the printer control language (e.g. ZPL or CPCL) of the printer.
-  Future<PrinterLanguage> controlLanguage(String ipAddress, int? port) async {
-    const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.PrinterTCPIPAPI.controlLanguage';
+  Future<PrinterLanguage> controlLanguage(ConnectionInfo info) async {
+    const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.PrinterAPI.controlLanguage';
     final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<Object?>(
       __pigeon_channelName,
       pigeonChannelCodec,
       binaryMessenger: __pigeon_binaryMessenger,
     );
     final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(<Object?>[ipAddress, port]) as List<Object?>?;
+        await __pigeon_channel.send(<Object?>[info]) as List<Object?>?;
     if (__pigeon_replyList == null) {
       throw _createConnectionError(__pigeon_channelName);
     } else if (__pigeon_replyList.length > 1) {
@@ -114,15 +168,15 @@ class PrinterTCPIPAPI {
   }
 
   /// Prints an image to the connected device as a monochrome image.
-  Future<void> printImage(String ipAddress, int? port, Uint8List data) async {
-    const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.PrinterTCPIPAPI.printImage';
+  Future<void> printImage(ConnectionInfo info, Uint8List data) async {
+    const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.PrinterAPI.printImage';
     final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<Object?>(
       __pigeon_channelName,
       pigeonChannelCodec,
       binaryMessenger: __pigeon_binaryMessenger,
     );
     final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(<Object?>[ipAddress, port, data]) as List<Object?>?;
+        await __pigeon_channel.send(<Object?>[info, data]) as List<Object?>?;
     if (__pigeon_replyList == null) {
       throw _createConnectionError(__pigeon_channelName);
     } else if (__pigeon_replyList.length > 1) {
@@ -137,15 +191,15 @@ class PrinterTCPIPAPI {
   }
 
   /// Sends the appropriate calibrate command to the printer.
-  Future<void> calibrate(String ipAddress, int? port) async {
-    const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.PrinterTCPIPAPI.calibrate';
+  Future<void> calibrate(ConnectionInfo info) async {
+    const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.PrinterAPI.calibrate';
     final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<Object?>(
       __pigeon_channelName,
       pigeonChannelCodec,
       binaryMessenger: __pigeon_binaryMessenger,
     );
     final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(<Object?>[ipAddress, port]) as List<Object?>?;
+        await __pigeon_channel.send(<Object?>[info]) as List<Object?>?;
     if (__pigeon_replyList == null) {
       throw _createConnectionError(__pigeon_channelName);
     } else if (__pigeon_replyList.length > 1) {
@@ -160,15 +214,15 @@ class PrinterTCPIPAPI {
   }
 
   /// Sends the appropriate print configuration command to the printer.
-  Future<void> printConfigurationLabel(String ipAddress, int? port) async {
-    const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.PrinterTCPIPAPI.printConfigurationLabel';
+  Future<void> printConfigurationLabel(ConnectionInfo info) async {
+    const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.PrinterAPI.printConfigurationLabel';
     final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<Object?>(
       __pigeon_channelName,
       pigeonChannelCodec,
       binaryMessenger: __pigeon_binaryMessenger,
     );
     final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(<Object?>[ipAddress, port]) as List<Object?>?;
+        await __pigeon_channel.send(<Object?>[info]) as List<Object?>?;
     if (__pigeon_replyList == null) {
       throw _createConnectionError(__pigeon_channelName);
     } else if (__pigeon_replyList.length > 1) {
@@ -183,15 +237,15 @@ class PrinterTCPIPAPI {
   }
 
   /// Sends the appropriate restore defaults command to the printer.
-  Future<void> restoreDefaults(String ipAddress, int? port) async {
-    const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.PrinterTCPIPAPI.restoreDefaults';
+  Future<void> restoreDefaults(ConnectionInfo info) async {
+    const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.PrinterAPI.restoreDefaults';
     final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<Object?>(
       __pigeon_channelName,
       pigeonChannelCodec,
       binaryMessenger: __pigeon_binaryMessenger,
     );
     final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(<Object?>[ipAddress, port]) as List<Object?>?;
+        await __pigeon_channel.send(<Object?>[info]) as List<Object?>?;
     if (__pigeon_replyList == null) {
       throw _createConnectionError(__pigeon_channelName);
     } else if (__pigeon_replyList.length > 1) {
@@ -206,15 +260,15 @@ class PrinterTCPIPAPI {
   }
 
   /// Converts the specified command to bytes using the Java default charset and sends the bytes to the printer.
-  Future<void> sendCommand(String ipAddress, int? port, String command) async {
-    const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.PrinterTCPIPAPI.sendCommand';
+  Future<void> sendCommand(ConnectionInfo info, String command) async {
+    const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.PrinterAPI.sendCommand';
     final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<Object?>(
       __pigeon_channelName,
       pigeonChannelCodec,
       binaryMessenger: __pigeon_binaryMessenger,
     );
     final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(<Object?>[ipAddress, port, command]) as List<Object?>?;
+        await __pigeon_channel.send(<Object?>[info, command]) as List<Object?>?;
     if (__pigeon_replyList == null) {
       throw _createConnectionError(__pigeon_channelName);
     } else if (__pigeon_replyList.length > 1) {
@@ -229,15 +283,15 @@ class PrinterTCPIPAPI {
   }
 
   /// Sends the appropriate reset command to the printer.
-  Future<void> reset(String ipAddress, int? port) async {
-    const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.PrinterTCPIPAPI.reset';
+  Future<void> reset(ConnectionInfo info) async {
+    const String __pigeon_channelName = 'dev.flutter.pigeon.linkos_sdk.PrinterAPI.reset';
     final BasicMessageChannel<Object?> __pigeon_channel = BasicMessageChannel<Object?>(
       __pigeon_channelName,
       pigeonChannelCodec,
       binaryMessenger: __pigeon_binaryMessenger,
     );
     final List<Object?>? __pigeon_replyList =
-        await __pigeon_channel.send(<Object?>[ipAddress, port]) as List<Object?>?;
+        await __pigeon_channel.send(<Object?>[info]) as List<Object?>?;
     if (__pigeon_replyList == null) {
       throw _createConnectionError(__pigeon_channelName);
     } else if (__pigeon_replyList.length > 1) {

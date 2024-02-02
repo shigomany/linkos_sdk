@@ -97,11 +97,11 @@ pigeon:
 
   inputs:
 
-    - input: printer_tcpip_api.dart
+    - input: printer_api.dart
       dart:
-        out: printer_tcpip_api.dart
+        out: printer_api.dart
       kotlin:
-        out: link_os/IPrinterTcpIpAPI.kt
+        out: printer/IPrinterAPI.kt
         package: .printer
 
     - input: network_discovery_printers_api.dart

@@ -5,9 +5,9 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-// Link OS API
-import com.plugin.linkos_sdk.link_os.LinkOsSdkOverTcpIpAPI
-import com.plugin.linkos_sdk.link_os.ImplLinkOsSdkOverTcpIpAPI
+// Printer API
+import com.plugin.linkos_sdk.printer.ImplPrinterAPI
+import com.plugin.linkos_sdk.printer.PrinterAPI
 // Discovery Printers API
 import com.plugin.linkos_sdk.discovery.NetworkDiscoveryPrintersAPI
 import com.plugin.linkos_sdk.discovery.ImplNetworkDiscoveryPrintersAPI
@@ -20,7 +20,7 @@ class LinkosSdkPlugin: FlutterPlugin, MethodCallHandler {
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "linkos_sdk")
     channel.setMethodCallHandler(this)
-    LinkOsSdkOverTcpIpAPI.setUp(flutterPluginBinding.binaryMessenger, api = ImplLinkOsSdkOverTcpIpAPI())
+    PrinterAPI.setUp(flutterPluginBinding.binaryMessenger, api = ImplPrinterAPI())
     NetworkDiscoveryPrintersAPI.setUp(flutterPluginBinding.binaryMessenger, api = ImplNetworkDiscoveryPrintersAPI())
   }
 

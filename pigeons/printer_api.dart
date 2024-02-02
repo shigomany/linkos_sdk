@@ -1,5 +1,17 @@
 import 'package:pigeon/pigeon.dart';
 
+class ConnectionInfo {
+  const ConnectionInfo({
+    this.ipAddress,
+    this.macAddress,
+    this.port,
+  });
+
+  final String? ipAddress;
+  final String? macAddress;
+  final int? port;
+}
+
 /// Enumeration of the various printer control languages supported by Zebra Printers.
 enum PrinterLanguage {
   /// Printer control language ZPL.
@@ -43,28 +55,28 @@ enum PrinterStatus {
 }
 
 @HostApi()
-abstract class PrinterTCPIPAPI {
+abstract class PrinterAPI {
   /// Returns a [PrinterStatus] that can be used to determine the status of a printer.
-  PrinterStatus currentStatus(String ipAddress, int? port);
+  PrinterStatus currentStatus(ConnectionInfo info);
 
   /// Returns the printer control language (e.g. ZPL or CPCL) of the printer.
-  PrinterLanguage controlLanguage(String ipAddress, int? port);
+  PrinterLanguage controlLanguage(ConnectionInfo info);
 
   /// Prints an image to the connected device as a monochrome image.
-  void printImage(String ipAddress, int? port, Uint8List data);
+  void printImage(ConnectionInfo info, Uint8List data);
 
   /// Sends the appropriate calibrate command to the printer.
-  void calibrate(String ipAddress, int? port);
+  void calibrate(ConnectionInfo info);
 
   /// Sends the appropriate print configuration command to the printer.
-  void printConfigurationLabel(String ipAddress, int? port);
+  void printConfigurationLabel(ConnectionInfo info);
 
   /// Sends the appropriate restore defaults command to the printer.
-  void restoreDefaults(String ipAddress, int? port);
+  void restoreDefaults(ConnectionInfo info);
 
   /// Converts the specified command to bytes using the Java default charset and sends the bytes to the printer.
-  void sendCommand(String ipAddress, int? port, String command);
+  void sendCommand(ConnectionInfo info, String command);
 
   /// Sends the appropriate reset command to the printer.
-  void reset(String ipAddress, int? port);
+  void reset(ConnectionInfo info);
 }

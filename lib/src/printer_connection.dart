@@ -2,8 +2,8 @@ import 'utils/regex.dart';
 
 /// Represents two types connection:
 ///
-/// * Bluetooth [BluetoothConnection] - in future
-/// * TCP/IP [TcpIpConnection]
+/// * Bluetooth - [BluetoothConnection]
+/// * TCP/IP - [TcpIpConnection]
 sealed class PrinterConnection {
   /// TCP/IP connection type.
   ///
@@ -13,8 +13,10 @@ sealed class PrinterConnection {
     int? port,
   }) = TcpIpConnection;
 
-  // const factory PrinterConnection.bluetooth({required String macAddress}) =
-  //     BluetoothConnection;
+  /// Bluetooth connection type.
+  factory PrinterConnection.bluetooth({
+    required String macAddress,
+  }) = BluetoothConnection;
 
   const PrinterConnection._();
 }
@@ -38,7 +40,11 @@ final class TcpIpConnection extends PrinterConnection {
 final class BluetoothConnection extends PrinterConnection {
   final String macAddress;
 
-  const BluetoothConnection({
+  BluetoothConnection({
     required this.macAddress,
-  }) : super._();
+  })  : assert(
+          macAddressRegex.hasMatch(macAddress),
+          'Invalid MAC address format',
+        ),
+        super._();
 }

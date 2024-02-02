@@ -1,4 +1,4 @@
-import 'pigeons/printer_tcpip_api.dart';
+import 'pigeons/printer_api.dart';
 import 'printer_connection.dart';
 
 /// {@macro src.LinkOS}
@@ -17,12 +17,18 @@ final class LinkOS {
   Future<PrinterLanguage> controlLanguage() {
     return switch (_connection) {
       TcpIpConnection(ipAddress: final ipAddress, port: final port) => () {
-          final tcpIpSdk = LinkOsSdkOverTcpIpAPI();
+          final printerApi = PrinterAPI();
 
-          return tcpIpSdk.controlLanguage(ipAddress, port);
+          return printerApi.controlLanguage(
+            ConnectionInfo(ipAddress: ipAddress, port: port),
+          );
         }(),
-      BluetoothConnection() =>
-        throw UnimplementedError('Bluetooth supports in future'),
+      BluetoothConnection(macAddress: final macAddress) => () {
+          final printerApi = PrinterAPI();
+          return printerApi.controlLanguage(
+            ConnectionInfo(macAddress: macAddress),
+          );
+        }(),
     };
   }
 
@@ -30,12 +36,18 @@ final class LinkOS {
   Future<PrinterStatus> currentStatus() {
     return switch (_connection) {
       TcpIpConnection(ipAddress: final ipAddress, port: final port) => () {
-          final tcpIpSdk = LinkOsSdkOverTcpIpAPI();
+          final printerApi = PrinterAPI();
 
-          return tcpIpSdk.currentStatus(ipAddress, port);
+          return printerApi.currentStatus(
+            ConnectionInfo(ipAddress: ipAddress, port: port),
+          );
         }(),
-      BluetoothConnection() =>
-        throw UnimplementedError('Bluetooth supports in future'),
+      BluetoothConnection(macAddress: final macAddress) => () {
+          final printerApi = PrinterAPI();
+          return printerApi.currentStatus(
+            ConnectionInfo(macAddress: macAddress),
+          );
+        }(),
     };
   }
 }

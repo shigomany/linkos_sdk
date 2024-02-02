@@ -86,43 +86,90 @@ enum class PrinterStatus(val raw: Int) {
     }
   }
 }
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class ConnectionInfo (
+  val ipAddress: String? = null,
+  val macAddress: String? = null,
+  val port: Long? = null
+
+) {
+  companion object {
+    @Suppress("UNCHECKED_CAST")
+    fun fromList(list: List<Any?>): ConnectionInfo {
+      val ipAddress = list[0] as String?
+      val macAddress = list[1] as String?
+      val port = list[2].let { if (it is Int) it.toLong() else it as Long? }
+      return ConnectionInfo(ipAddress, macAddress, port)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf<Any?>(
+      ipAddress,
+      macAddress,
+      port,
+    )
+  }
+}
+@Suppress("UNCHECKED_CAST")
+private object PrinterAPICodec : StandardMessageCodec() {
+  override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
+    return when (type) {
+      128.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          ConnectionInfo.fromList(it)
+        }
+      }
+      else -> super.readValueOfType(type, buffer)
+    }
+  }
+  override fun writeValue(stream: ByteArrayOutputStream, value: Any?)   {
+    when (value) {
+      is ConnectionInfo -> {
+        stream.write(128)
+        writeValue(stream, value.toList())
+      }
+      else -> super.writeValue(stream, value)
+    }
+  }
+}
+
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
-interface PrinterTCPIPAPI {
+interface PrinterAPI {
   /** Returns a [PrinterStatus] that can be used to determine the status of a printer. */
-  fun currentStatus(ipAddress: String, port: Long?): PrinterStatus
+  fun currentStatus(info: ConnectionInfo): PrinterStatus
   /** Returns the printer control language (e.g. ZPL or CPCL) of the printer. */
-  fun controlLanguage(ipAddress: String, port: Long?): PrinterLanguage
+  fun controlLanguage(info: ConnectionInfo): PrinterLanguage
   /** Prints an image to the connected device as a monochrome image. */
-  fun printImage(ipAddress: String, port: Long?, data: ByteArray)
+  fun printImage(info: ConnectionInfo, data: ByteArray)
   /** Sends the appropriate calibrate command to the printer. */
-  fun calibrate(ipAddress: String, port: Long?)
+  fun calibrate(info: ConnectionInfo)
   /** Sends the appropriate print configuration command to the printer. */
-  fun printConfigurationLabel(ipAddress: String, port: Long?)
+  fun printConfigurationLabel(info: ConnectionInfo)
   /** Sends the appropriate restore defaults command to the printer. */
-  fun restoreDefaults(ipAddress: String, port: Long?)
+  fun restoreDefaults(info: ConnectionInfo)
   /** Converts the specified command to bytes using the Java default charset and sends the bytes to the printer. */
-  fun sendCommand(ipAddress: String, port: Long?, command: String)
+  fun sendCommand(info: ConnectionInfo, command: String)
   /** Sends the appropriate reset command to the printer. */
-  fun reset(ipAddress: String, port: Long?)
+  fun reset(info: ConnectionInfo)
 
   companion object {
-    /** The codec used by PrinterTCPIPAPI. */
+    /** The codec used by PrinterAPI. */
     val codec: MessageCodec<Any?> by lazy {
-      StandardMessageCodec()
+      PrinterAPICodec
     }
-    /** Sets up an instance of `PrinterTCPIPAPI` to handle messages through the `binaryMessenger`. */
+    /** Sets up an instance of `PrinterAPI` to handle messages through the `binaryMessenger`. */
     @Suppress("UNCHECKED_CAST")
-    fun setUp(binaryMessenger: BinaryMessenger, api: PrinterTCPIPAPI?) {
+    fun setUp(binaryMessenger: BinaryMessenger, api: PrinterAPI?) {
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.linkos_sdk.PrinterTCPIPAPI.currentStatus", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.linkos_sdk.PrinterAPI.currentStatus", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val ipAddressArg = args[0] as String
-            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long? }
+            val infoArg = args[0] as ConnectionInfo
             var wrapped: List<Any?>
             try {
-              wrapped = listOf<Any?>(api.currentStatus(ipAddressArg, portArg).raw)
+              wrapped = listOf<Any?>(api.currentStatus(infoArg).raw)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
             }
@@ -133,15 +180,14 @@ interface PrinterTCPIPAPI {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.linkos_sdk.PrinterTCPIPAPI.controlLanguage", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.linkos_sdk.PrinterAPI.controlLanguage", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val ipAddressArg = args[0] as String
-            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long? }
+            val infoArg = args[0] as ConnectionInfo
             var wrapped: List<Any?>
             try {
-              wrapped = listOf<Any?>(api.controlLanguage(ipAddressArg, portArg).raw)
+              wrapped = listOf<Any?>(api.controlLanguage(infoArg).raw)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
             }
@@ -152,16 +198,15 @@ interface PrinterTCPIPAPI {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.linkos_sdk.PrinterTCPIPAPI.printImage", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.linkos_sdk.PrinterAPI.printImage", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val ipAddressArg = args[0] as String
-            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long? }
-            val dataArg = args[2] as ByteArray
+            val infoArg = args[0] as ConnectionInfo
+            val dataArg = args[1] as ByteArray
             var wrapped: List<Any?>
             try {
-              api.printImage(ipAddressArg, portArg, dataArg)
+              api.printImage(infoArg, dataArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -173,15 +218,14 @@ interface PrinterTCPIPAPI {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.linkos_sdk.PrinterTCPIPAPI.calibrate", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.linkos_sdk.PrinterAPI.calibrate", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val ipAddressArg = args[0] as String
-            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long? }
+            val infoArg = args[0] as ConnectionInfo
             var wrapped: List<Any?>
             try {
-              api.calibrate(ipAddressArg, portArg)
+              api.calibrate(infoArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -193,15 +237,14 @@ interface PrinterTCPIPAPI {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.linkos_sdk.PrinterTCPIPAPI.printConfigurationLabel", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.linkos_sdk.PrinterAPI.printConfigurationLabel", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val ipAddressArg = args[0] as String
-            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long? }
+            val infoArg = args[0] as ConnectionInfo
             var wrapped: List<Any?>
             try {
-              api.printConfigurationLabel(ipAddressArg, portArg)
+              api.printConfigurationLabel(infoArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -213,15 +256,14 @@ interface PrinterTCPIPAPI {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.linkos_sdk.PrinterTCPIPAPI.restoreDefaults", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.linkos_sdk.PrinterAPI.restoreDefaults", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val ipAddressArg = args[0] as String
-            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long? }
+            val infoArg = args[0] as ConnectionInfo
             var wrapped: List<Any?>
             try {
-              api.restoreDefaults(ipAddressArg, portArg)
+              api.restoreDefaults(infoArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -233,16 +275,15 @@ interface PrinterTCPIPAPI {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.linkos_sdk.PrinterTCPIPAPI.sendCommand", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.linkos_sdk.PrinterAPI.sendCommand", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val ipAddressArg = args[0] as String
-            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long? }
-            val commandArg = args[2] as String
+            val infoArg = args[0] as ConnectionInfo
+            val commandArg = args[1] as String
             var wrapped: List<Any?>
             try {
-              api.sendCommand(ipAddressArg, portArg, commandArg)
+              api.sendCommand(infoArg, commandArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)
@@ -254,15 +295,14 @@ interface PrinterTCPIPAPI {
         }
       }
       run {
-        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.linkos_sdk.PrinterTCPIPAPI.reset", codec)
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.linkos_sdk.PrinterAPI.reset", codec)
         if (api != null) {
           channel.setMessageHandler { message, reply ->
             val args = message as List<Any?>
-            val ipAddressArg = args[0] as String
-            val portArg = args[1].let { if (it is Int) it.toLong() else it as Long? }
+            val infoArg = args[0] as ConnectionInfo
             var wrapped: List<Any?>
             try {
-              api.reset(ipAddressArg, portArg)
+              api.reset(infoArg)
               wrapped = listOf<Any?>(null)
             } catch (exception: Throwable) {
               wrapped = wrapError(exception)

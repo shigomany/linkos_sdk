@@ -14,7 +14,7 @@ This package was inspired due to a problem related to the fact that the current 
 
 | Functionality  |      iOS      |    Android    |    Windows    |     MacOS     |     Linux     |
 | -------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
-| Connect via Bluetooth  |      ❌       |      ❌       |      ❌      |      ❌       |      ❌       |
+| Connect via Bluetooth  |      ❌       |      ✅       |      ❌      |      ❌       |      ❌       |
 | Connect via TCP/IP  |      ❌       |      ✅       |      ❌      |      ❌       |      ❌       |
 | Printer Status  |      ❌       |      ✅       |      ❌      |      ❌       |      ❌       |
 | Printer Control Language  |      ❌       |      ✅       |      ❌      |      ❌       |      ❌       |
