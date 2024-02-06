@@ -17,7 +17,7 @@ class DiscoveryPrintersScreen extends StatefulWidget {
 class _DiscoveryPrintersScreenState extends State<DiscoveryPrintersScreen> {
   late final Future<List<DiscoveredPrinter>> _future;
 
-  static const _subnetRange = '192.168.0.*';
+  static const _subnetRange = '10.0.132.*';
 
   @override
   void initState() {

@@ -6,14 +6,7 @@ public class LinkosSdkPlugin: NSObject, FlutterPlugin {
     let channel = FlutterMethodChannel(name: "linkos_sdk", binaryMessenger: registrar.messenger())
     let instance = LinkosSdkPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
-  }
-
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    switch call.method {
-    case "getPlatformVersion":
-      result("iOS " + UIDevice.current.systemVersion)
-    default:
-      result(FlutterMethodNotImplemented)
-    }
+    PrinterAPISetup.setUp(binaryMessenger: registrar.messenger(), api: ImplPrinterAPI())
+    NetworkDiscoveryPrintersAPISetup.setUp(binaryMessenger: registrar.messenger(), api: ImplNetworkDiscoveryPrintersAPI())
   }
 }

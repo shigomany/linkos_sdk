@@ -28,6 +28,7 @@ enum PrinterLanguage {
 
 /// Describe printer status.
 /// {@category Printer}
+@SwiftFunction('ZPrinterStatus')
 enum PrinterStatus {
   /// The head is cold.
   headCold,

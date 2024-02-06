@@ -17,6 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   FutureStates<PrinterStatus> _printerStatus = const FutureStates.initial();
   FutureStates<PrinterLanguage> _printerLanguage = const FutureStates.initial();
+  final _ipController = TextEditingController(text: '10.0.132.117');
 
   @override
   void initState() {
@@ -41,13 +42,28 @@ class _HomeScreenState extends State<HomeScreen> {
                     return Column(
                       children: [
                         const Text('Printer isn\'t set'),
+                        ConnectionTypes(
+                          ipController: _ipController,
+                        ),
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: _handlerDiscoveryPrinters,
-                            child: const Text('Discovery Printers'),
+                            onPressed: () {
+                              setState(() {
+                                _discoveredPrinter = DiscoveredPrinter(
+                                    address: _ipController.text);
+                              });
+                            },
+                            child: const Text('Connect'),
                           ),
                         )
+                        // SizedBox(
+                        //   width: double.infinity,
+                        //   child: ElevatedButton(
+                        //     onPressed: _handlerDiscoveryPrinters,
+                        //     child: const Text('Discovery Printers'),
+                        //   ),
+                        // )
                       ],
                     );
                   }
@@ -182,9 +198,11 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => DiscoveryPrintersScreen(
-          onSelectPrinter: (value) => setState(() {
-            _discoveredPrinter = value;
-          }),
+          onSelectPrinter: (value) {
+            setState(() {
+              _discoveredPrinter = value;
+            });
+          },
         ),
       ),
     );

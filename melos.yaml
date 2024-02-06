@@ -1,0 +1,57 @@
+name: LinkOS
+
+packages:
+  - .
+  - example
+
+command:
+  # version:
+  #   # Generate commit links in package changelogs.
+  #   linkToCommits: true
+  #   workspaceChangelog: true
+
+  bootstrap:
+    # It seems so that running "pub get" in parallel has some issues (like
+    # https://github.com/dart-lang/pub/issues/3404). Disabling this feature
+    # makes the CI much more stable.
+    runPubGetInParallel: false
+
+scripts:
+
+  build_runner:
+    run: dart run build_runner build -d
+    description: Build Runner - Build
+    packageFilters: 
+      fileExists: 'build.yaml'
+
+  example:build_ios:
+    run: |
+      flutter build ios --no-codesign
+    description: Build a specific example app for iOS.
+    exec:
+      concurrency: 1
+    packageFilters:
+      flutter: true
+      # scope: '*example*'
+
+
+  pods:recreate:
+    run: |
+      cd ios && \
+      pod deintegrate &&
+      pod install --repo-update
+    description: Recreate pods dependecies
+    exec:
+      concurrency: 1
+    packageFilters:
+      dirExists:
+        - ios
+      flutter: true
+
+  pub_get:
+    run: dart pub get
+    description: Fetching packages
+    exec:
+      concurrency: 2
+    packageFilters:
+      flutter: true

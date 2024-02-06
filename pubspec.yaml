@@ -11,23 +11,20 @@ topics:
   - printers
   - zebra
   - pigeon
+  - linkos
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
-  flutter: '>=3.3.0'
 
 dependencies:
-  flutter:
-    sdk: flutter
   plugin_platform_interface: ^2.0.2
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   flutter_lints: ^2.0.0
   pigeon: ^16.0.4
   build_runner: ^2.4.8
   pigeon_build_runner: ^1.1.1
+  melos: ^4.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -86,7 +83,7 @@ pigeon:
       out: lib/src/pigeons/ 
       test-out: test/pigeons/
     swift:
-      out: ios/Runner/
+      out: ios/Classes/Pigeons
     kotlin:
       out: android/src/main/kotlin/com/plugin/linkos_sdk
       package: com.plugin.linkos_sdk
@@ -103,6 +100,8 @@ pigeon:
       kotlin:
         out: printer/IPrinterAPI.kt
         package: .printer
+      swift:
+        out: IPrinterAPI.g.swift
 
     - input: network_discovery_printers_api.dart
       dart:
@@ -110,3 +109,5 @@ pigeon:
       kotlin:
         out: discovery/INetworkDiscoveryPrintersAPI.kt
         package: .discovery
+      swift:
+        out: INetworkDiscoveryPrintersAPI.g.swift
