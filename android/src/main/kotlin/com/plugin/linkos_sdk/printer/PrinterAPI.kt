@@ -4,6 +4,7 @@ import android.graphics.BitmapFactory
 import com.plugin.linkos_sdk.convertPrinterStatus
 import com.zebra.sdk.comm.BluetoothConnection
 import com.zebra.sdk.comm.Connection
+import com.zebra.sdk.comm.ConnectionException
 import com.zebra.sdk.comm.TcpConnection;
 import com.zebra.sdk.graphics.ZebraImageFactory
 import com.zebra.sdk.printer.ZebraPrinter
@@ -11,6 +12,7 @@ import com.zebra.sdk.printer.ZebraPrinterFactory
 import com.zebra.sdk.printer.PrinterLanguage as ZPrinterLanguage
 
 import java.lang.Exception
+import java.util.Objects
 import kotlin.concurrent.thread
 
 class ImplPrinterAPI : PrinterAPI {
@@ -79,17 +81,22 @@ class ImplPrinterAPI : PrinterAPI {
     /// Execute [callback] in non-main thread.
     /// Also [connection.open] and close after finished [callback]
     private fun executeThreaded(connection: Connection, callback: (ZebraPrinter) -> Unit) {
+        var error: Exception? = null
         thread (start = true) {
             try {
                 connection.open()
                 val printer = ZebraPrinterFactory.getInstance(connection)
                 callback(printer)
-            } catch (_: Exception) {
-
+            } catch (e: Exception) {
+                error = e
             } finally {
                 connection.close()
             }
         }.join()
+
+        if (error != null) {
+            throw ConnectionException(error!!.message)
+        }
     }
 
     private fun connection(info: ConnectionInfo): Connection {

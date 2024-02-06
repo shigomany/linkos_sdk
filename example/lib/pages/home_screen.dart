@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:linkos_sdk/linkos_sdk.dart';
 
 import '../utils/future_states.dart';
@@ -17,12 +18,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   FutureStates<PrinterStatus> _printerStatus = const FutureStates.initial();
   FutureStates<PrinterLanguage> _printerLanguage = const FutureStates.initial();
-  final _ipController = TextEditingController(text: '10.0.132.117');
 
-  @override
-  void initState() {
-    super.initState();
-  }
+  FutureStates<bool> _printImage = const FutureStates.initial();
+  final _ipController = TextEditingController(text: '10.0.132.117');
+  final _imagePath = 'assets/raster/dash.png';
 
   @override
   Widget build(BuildContext context) {
@@ -42,28 +41,28 @@ class _HomeScreenState extends State<HomeScreen> {
                     return Column(
                       children: [
                         const Text('Printer isn\'t set'),
-                        ConnectionTypes(
-                          ipController: _ipController,
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _discoveredPrinter = DiscoveredPrinter(
-                                    address: _ipController.text);
-                              });
-                            },
-                            child: const Text('Connect'),
-                          ),
-                        )
+                        // ConnectionTypes(
+                        //   ipController: _ipController,
+                        // ),
                         // SizedBox(
                         //   width: double.infinity,
                         //   child: ElevatedButton(
-                        //     onPressed: _handlerDiscoveryPrinters,
-                        //     child: const Text('Discovery Printers'),
+                        //     onPressed: () {
+                        //       setState(() {
+                        //         _discoveredPrinter = DiscoveredPrinter(
+                        //             address: _ipController.text);
+                        //       });
+                        //     },
+                        //     child: const Text('Connect'),
                         //   ),
                         // )
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: _handlerDiscoveryPrinters,
+                            child: const Text('Discovery Printers'),
+                          ),
+                        )
                       ],
                     );
                   }
@@ -139,6 +138,34 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
+            // Print Image
+            ChapterBlock(
+              title: 'Print Image',
+              child: Column(
+                children: [
+                  Image.asset(
+                    _imagePath,
+                    width: 300,
+                    height: 200,
+                  ),
+                  FutureStatesBuilder(
+                    source: _printImage,
+                    initial: () => const Text('No Data'),
+                    pending: () => const CircularProgressIndicator.adaptive(),
+                    success: (_) => const Text('Ok'),
+                    failure: (error) => Text('Error: ${error.runtimeType}'),
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed:
+                          _discoveredPrinter == null ? null : _handlePrintImage,
+                      child: const Text('Print Image'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -192,6 +219,26 @@ class _HomeScreenState extends State<HomeScreen> {
         _ => throw UnimplementedError()
       },
     );
+  }
+
+  void _handlePrintImage() async {
+    final linkOs = _instance();
+    setState(() {
+      _printImage = const FutureStates.pending();
+    });
+
+    try {
+      final image = await rootBundle.load(_imagePath);
+      await linkOs.printImage(image.buffer.asUint8List());
+
+      setState(() {
+        _printImage = const FutureStates.success(value: true);
+      });
+    } catch (e) {
+      setState(() {
+        _printImage = FutureStates.failure(error: e);
+      });
+    }
   }
 
   void _handlerDiscoveryPrinters() {

@@ -6,6 +6,7 @@ homepage: https://github.com/shigomany/linkos_sdk.git
 platforms:
   android:
   ios:
+  macos:
 
 topics:
   - printers
